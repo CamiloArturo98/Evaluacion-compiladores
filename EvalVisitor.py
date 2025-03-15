@@ -5,11 +5,10 @@ class EvalVisitor(ExprVisitor):
         self.memory = {}  # Diccionario para almacenar variables
 
     def visitAssignExpr(self, ctx):
-    var_name = ctx.ID().getText()
-    value = self.visit(ctx.expr())  # Evaluamos la expresión
-    self.variables[var_name] = value  # Guardamos el resultado
-    return value
-
+        var_name = ctx.ID().getText()  # Obtenemos el nombre de la variable
+        value = self.visit(ctx.expr())  # Evaluamos la expresión a la derecha de '='
+        self.memory[var_name] = value  # Guardamos el valor en 'memory'
+        return value
 
     def visitNumberExpr(self, ctx):
         return int(ctx.NUMBER().getText())
@@ -31,7 +30,7 @@ class EvalVisitor(ExprVisitor):
             return left / right  # División flotante
 
     def visitParensExpr(self, ctx):
-        return self.visit(ctx.expr())  # Aquí corregimos el error
+        return self.visit(ctx.expr())  # Evaluamos la expresión entre paréntesis
 
     def visitIdExpr(self, ctx):
         var_name = ctx.ID().getText()
